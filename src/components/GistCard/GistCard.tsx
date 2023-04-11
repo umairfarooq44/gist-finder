@@ -71,7 +71,13 @@ const GistCard = (props: IGistCardProps) => {
             <ListItem
               key={file.raw_url}
               secondaryAction={
-                <IconButton edge="end" component="a" href={file.raw_url}>
+                <IconButton
+                  edge="end"
+                  component="a"
+                  href={file.raw_url}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <OpenInNewRoundedIcon />
                 </IconButton>
               }
