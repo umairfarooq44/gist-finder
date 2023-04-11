@@ -12,7 +12,7 @@ interface ISearchProps {
 }
 
 const Container = styled('div')`
-  margin-top: 5rem;
+  margin-top: 3rem;
   margin-bottom: 2rem;
   display: flex;
   gap: 2rem;

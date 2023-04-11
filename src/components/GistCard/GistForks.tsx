@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import CardContent from '@mui/material/CardContent';
 import { useGistForks } from '../../services/gist';
@@ -13,8 +14,13 @@ const ForkContent = styled(CardContent)`
   padding-top: 0;
 `;
 
-const GistForks = () => {
-  const { data, isLoading, error } = useGistForks('904343');
+interface IGistForksProps {
+  id: string;
+}
+
+const GistForks = (props: IGistForksProps) => {
+  const { id } = props;
+  const { data, isLoading, error } = useGistForks(id);
   if (isLoading) {
     return (
       <ForkContent>
@@ -29,8 +35,14 @@ const GistForks = () => {
   return (
     <ForkContent>
       <Container>
+        {data?.length === 0 && (
+          <Typography color="red" variant="subtitle2">
+            No Forks available
+          </Typography>
+        )}
         {data?.map((val) => (
           <Avatar
+            key={val.id}
             alt={val.owner.login}
             src={val.owner.avatar_url}
             component="a"

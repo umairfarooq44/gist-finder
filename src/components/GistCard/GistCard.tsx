@@ -17,22 +17,35 @@ import ListItemText from '@mui/material/ListItemText';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import tinyColor from 'tinycolor2';
 import ExpandMore from './ExpandMore';
 import GistForks from './GistForks';
-import languageCodes from '../../utils/languageColorCode';
+import languageCodes, { Languages } from '../../utils/languageColorCode';
+import { IFile } from '../../typings/gist';
 
-const LanguageChip = styled(Chip, {
-  shouldForwardProp: (prop) => prop !== 'language',
-})<{ language: keyof typeof languageCodes }>(({ language, theme }) => ({
-  backgroundColor: languageCodes[language],
-  color: theme.palette.common.white,
-}));
+// const LanguageChip = styled(Chip, {
+//   shouldForwardProp: (prop) => prop !== 'language',
+// })<{ language: Languages }>(({ language, theme }) => ({
+//   backgroundColor: languageCodes[language],
+//   color: tinyColor(languageCodes[language]).isDark()
+//     ? theme.palette.common.white
+//     : theme.palette.common.black,
+// }));
 
 const GistContent = styled(CardContent)`
   padding: 0 24px;
 `;
 
-const GistCard = () => {
+interface IGistCardProps {
+  avatarUrl: string;
+  files: IFile[];
+  languages: Languages[];
+  id: string;
+  description: string;
+}
+
+const GistCard = (props: IGistCardProps) => {
+  const { avatarUrl, files, languages, id, description } = props;
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -43,39 +56,51 @@ const GistCard = () => {
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
+          <Avatar
+            sx={{ bgcolor: red[500] }}
+            aria-label="recipe"
+            src={avatarUrl}
+          ></Avatar>
         }
-        title="Timezones in JavaScript, from http://errtheblog.com/posts/49-a-zoned-defense"
+        title={description || 'No Description'}
       />
 
       <GistContent>
         <List dense>
-          <ListItem
-            secondaryAction={
-              <IconButton
-                edge="end"
-                component="a"
-                href="https://gist.github.com/robertpeteuil/bb2dc86f3b3e25d203664d61410bfa30"
-              >
-                <OpenInNewRoundedIcon />
-              </IconButton>
-            }
-            divider
-          >
-            <ListItemAvatar>
-              <Avatar>
-                <ArticleIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="Single-line item" />
-          </ListItem>
+          {files.map((file) => (
+            <ListItem
+              key={file.raw_url}
+              secondaryAction={
+                <IconButton edge="end" component="a" href={file.raw_url}>
+                  <OpenInNewRoundedIcon />
+                </IconButton>
+              }
+              divider
+            >
+              <ListItemAvatar>
+                <Avatar>
+                  <ArticleIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={file.filename} />
+            </ListItem>
+          ))}
         </List>
         <Stack spacing={1} marginTop="1rem">
           <Stack direction="row" spacing={1}>
-            <LanguageChip label="JavaScript" language="Vue" />
-            <LanguageChip label="Ruby" language="Ruby" />
+            {languages.map((language) => (
+              <Chip
+                key={language}
+                label={language}
+                color="primary"
+                sx={{
+                  backgroundColor: languageCodes[language],
+                  color: tinyColor(languageCodes[language] || '').isDark()
+                    ? '#fff'
+                    : '#000',
+                }}
+              />
+            ))}
           </Stack>
         </Stack>
       </GistContent>
@@ -90,7 +115,7 @@ const GistCard = () => {
         </ExpandMore>
       </CardActions>
       <Collapse in={expanded} timeout="auto" mountOnEnter>
-        <GistForks />
+        <GistForks id={id} />
       </Collapse>
     </Card>
   );
