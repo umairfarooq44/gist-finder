@@ -14,6 +14,24 @@
 - [![NodeJS][nodejs]][node-url]
 - [![React][react]][react-url]
 
+## Libraries used
+
+- next.js: Framework to create react app
+- material-ui: React component library
+- swr: React hooks for data fetching
+- axios: Library to hit APIs
+- Typescript: Add types to React components
+- react-hook-form: hook to handle form
+
+## Steps Taken
+
+- First I initialized nextjs project and added swr provider.
+- Then I built a card component to display gist information.
+- I built GistForks component to show latest 3 forks inside card using Collapse component.
+- Then I built Search component using `mui` components and `react--hook-form`.
+- Then used `useSWR` to hit fork API and used `useSWRInfinite` to list gists of user with load more functionality.
+- I used masonry layout to display Gist cards on home page as the height of cards was variable.
+
 ## 🚀 Getting Started
 
 This is an example of how you may give instructions on setting up your project locally.
