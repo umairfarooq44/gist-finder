@@ -17,6 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
 import tinyColor from 'tinycolor2';
 import ExpandMore from './ExpandMore';
 import GistForks from './GistForks';
@@ -111,14 +112,16 @@ const GistCard = (props: IGistCardProps) => {
         </Stack>
       </GistContent>
       <CardActions disableSpacing>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
+        <Tooltip title="Show Forks" placement="top">
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </Tooltip>
       </CardActions>
       <Collapse in={expanded} timeout="auto" mountOnEnter>
         <GistForks id={id} />
